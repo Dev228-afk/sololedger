@@ -86,6 +86,7 @@ export function TransactionsPage() {
             Search merchant
             <input
               type="search"
+              className="sl-input"
               placeholder="e.g. DEMO CLOUD"
               value={q}
               onChange={(e) => {
@@ -97,8 +98,6 @@ export function TransactionsPage() {
                 minHeight: '40px',
                 marginTop: '4px',
                 padding: '6px 10px',
-                borderRadius: 'var(--r-sm)',
-                border: '1px solid var(--line)',
               }}
             />
           </label>
@@ -107,6 +106,7 @@ export function TransactionsPage() {
             Category
             <select
               aria-label="Filter by category"
+              className="sl-input"
               value={category}
               onChange={(e) => {
                 setCursor(undefined);
@@ -117,8 +117,6 @@ export function TransactionsPage() {
                 minHeight: '40px',
                 marginTop: '4px',
                 padding: '6px 10px',
-                borderRadius: 'var(--r-sm)',
-                border: '1px solid var(--line)',
               }}
             >
               <option value="">All categories</option>
@@ -134,6 +132,7 @@ export function TransactionsPage() {
             Review status
             <select
               aria-label="Filter by review status"
+              className="sl-input"
               value={reviewStatus}
               onChange={(e) => {
                 setCursor(undefined);
@@ -144,8 +143,6 @@ export function TransactionsPage() {
                 minHeight: '40px',
                 marginTop: '4px',
                 padding: '6px 10px',
-                borderRadius: 'var(--r-sm)',
-                border: '1px solid var(--line)',
               }}
             >
               <option value="">All statuses</option>
@@ -240,7 +237,7 @@ export function TransactionsPage() {
                   </thead>
                   <tbody>
                     {data?.items.map((t) => (
-                      <tr key={t.id} style={{ borderBottom: '1px solid var(--line)' }}>
+                      <tr key={t.id} className="sl-row-hover" style={{ borderBottom: '1px solid var(--line)' }}>
                         <td className="tabular-nums" style={{ padding: '12px 8px', whiteSpace: 'nowrap' }}>
                           {t.postedDate}
                         </td>

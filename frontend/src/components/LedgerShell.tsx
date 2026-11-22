@@ -1,4 +1,4 @@
-import { useEffect, useRef, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import {
   Activity,
@@ -15,6 +15,17 @@ import {
   useReviewQueue,
   useSwitchDemoAccount,
 } from '../api/hooks.js';
+import { AlertBanner } from './UiPrimitives.js';
+
+function SoloLedgerLogo() {
+  return (
+    <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true" style={{ flexShrink: 0 }}>
+      <rect x="2" y="2" width="26" height="26" rx="8" fill="#10b981" />
+      <path d="M9 10.5h12M9 15h8.5M9 19.5h10.5" stroke="#071912" strokeWidth="2.3" strokeLinecap="round" />
+      <circle cx="21" cy="19.5" r="2" fill="#071912" />
+    </svg>
+  );
+}
 
 export function LedgerShell({
   title,
@@ -32,6 +43,7 @@ export function LedgerShell({
   const { data: accountsData } = useDemoAccounts();
   const switchAccount = useSwitchDemoAccount();
   const autoBootstrapped = useRef(false);
+  const [accountNotice, setAccountNotice] = useState<string | null>(null);
 
   const activeAccount = sessionData?.account ?? null;
   const { data: queueData } = useReviewQueue(activeAccount?.id);
@@ -71,26 +83,12 @@ export function LedgerShell({
     <div className="sl-shell">
       <aside className="sl-sidebar" aria-label="Primary navigation">
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '4px 6px' }}>
-          <div
-            aria-hidden="true"
-            style={{
-              width: '30px',
-              height: '30px',
-              borderRadius: '9px',
-              backgroundColor: 'var(--accent)',
-              color: '#ffffff',
-              display: 'grid',
-              placeItems: 'center',
-              fontSize: '13px',
-              fontWeight: 700,
-              flexShrink: 0,
-            }}
-          >
-            SL
-          </div>
+          <SoloLedgerLogo />
           <div>
-            <div style={{ fontSize: '15px', fontWeight: 700, lineHeight: 1.2 }}>SoloLedger</div>
-            <div style={{ fontSize: '11px', color: 'var(--muted)' }}>Synthetic Demo Ledger</div>
+            <div style={{ fontSize: '15px', fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--rail-ink)', lineHeight: 1.2 }}>
+              SoloLedger
+            </div>
+            <div style={{ fontSize: '11px', color: 'var(--rail-muted)' }}>Minor-Unit Bookkeeping</div>
           </div>
         </div>
 
@@ -105,19 +103,7 @@ export function LedgerShell({
                 key={item.to}
                 to={item.to}
                 aria-current={active ? 'page' : undefined}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '10px',
-                  minHeight: '42px',
-                  padding: '8px 12px',
-                  borderRadius: 'var(--r-sm)',
-                  textDecoration: 'none',
-                  fontSize: '14px',
-                  fontWeight: active ? 600 : 500,
-                  backgroundColor: active ? 'var(--accent-soft)' : 'transparent',
-                  color: active ? 'var(--accent-hover)' : 'var(--ink)',
-                }}
+                className={`sl-nav-link ${active ? 'active' : ''}`}
               >
                 <Icon size={17} aria-hidden="true" />
                 <span>{item.label}</span>
@@ -129,15 +115,15 @@ export function LedgerShell({
         <div
           style={{
             marginTop: 'auto',
-            padding: '10px 12px',
+            padding: '12px',
             borderRadius: 'var(--r-sm)',
-            backgroundColor: 'var(--surface-muted)',
-            border: '1px solid var(--line)',
+            backgroundColor: 'var(--rail-hover)',
+            border: '1px solid var(--rail-border)',
             fontSize: '12px',
-            color: 'var(--muted)',
+            color: 'var(--rail-muted)',
           }}
         >
-          <strong style={{ color: 'var(--ink)', display: 'block', marginBottom: '2px' }}>
+          <strong style={{ color: 'var(--rail-ink)', display: 'block', marginBottom: '2px' }}>
             Synthetic demo workspace
           </strong>
           No live bank connections or tax filing advice. Signed amounts (&minus; debit / + credit).
@@ -147,7 +133,7 @@ export function LedgerShell({
       <div className="sl-workspace">
         <header className="sl-header">
           <div>
-            <h1 style={{ margin: 0, fontSize: '26px', lineHeight: 1.25, fontWeight: 700 }}>
+            <h1 style={{ margin: 0, fontSize: '26px', letterSpacing: '-0.025em', lineHeight: 1.2, fontWeight: 700 }}>
               {title}
             </h1>
             {subtitle ? (
@@ -173,19 +159,23 @@ export function LedgerShell({
               <select
                 id="demo-account-select"
                 aria-label="Demo workspace account"
+                className="sl-input"
                 value={activeAccount?.id ?? ''}
                 onChange={(e) => {
-                  if (e.target.value) switchAccount.mutate(e.target.value);
+                  const id = e.target.value;
+                  if (!id) return;
+                  const chosen = accountsData?.items.find((a) => a.id === id);
+                  switchAccount.mutate(id, {
+                    onSuccess: () => {
+                      setAccountNotice(`Active workspace switched to ${chosen?.displayName ?? 'selected ledger'}.`);
+                    },
+                  });
                 }}
                 style={{
                   minHeight: '38px',
                   padding: '6px 10px',
-                  borderRadius: 'var(--r-sm)',
-                  border: '1px solid var(--line)',
-                  backgroundColor: 'var(--surface)',
-                  color: 'var(--ink)',
                   fontSize: '13px',
-                  fontWeight: 500,
+                  fontWeight: 600,
                 }}
               >
                 {accountsData?.items.map((acc) => (
@@ -198,9 +188,15 @@ export function LedgerShell({
           </div>
         </header>
 
-        <main className="sl-main">{children}</main>
+        <main className="sl-main">
+          {accountNotice ? (
+            <div style={{ marginBottom: 'var(--space-4)' }}>
+              <AlertBanner kind="info" message={accountNotice} />
+            </div>
+          ) : null}
+          {children}
+        </main>
       </div>
     </div>
   );
 }
-

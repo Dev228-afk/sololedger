@@ -490,13 +490,40 @@ describe('Route empty states, error banners, filters & edge branches', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Accept suggested category' }));
     await waitFor(() => expect(acceptedId).toBe('t2'));
 
-    // Also test Refresh queue after non-409 failure + bulk failure
+    await userEvent.selectOptions(screen.getByLabelText('Category for review'), 'EQUIPMENT');
+    await userEvent.click(screen.getByRole('button', { name: 'Save changed category' }));
+    await waitFor(() => {
+      expect(screen.getByText(/Saved updated category/i)).toBeInTheDocument();
+    });
+
+    // Also test Refresh queue after non-409 SoloLedgerApiError + bulk failure
+    await userEvent.selectOptions(screen.getByLabelText('Category for review'), 'SOFTWARE');
+    soloApi.reviewTransaction = async () => {
+      throw new SoloLedgerApiError(400, {
+        code: 'BAD_REVIEW',
+        message: 'Invalid category code.',
+        requestId: 'req_bad',
+        details: {},
+        fieldErrors: {},
+      });
+    };
+    await userEvent.click(screen.getByRole('button', { name: 'Accept suggested category' }));
+    await waitFor(() => {
+      expect(screen.getByText('Invalid category code.')).toBeInTheDocument();
+    });
     soloApi.reviewTransaction = async () => {
       throw new Error('Network error');
     };
     await userEvent.click(screen.getByRole('button', { name: 'Accept suggested category' }));
     await waitFor(() => {
       expect(screen.getByText('Failed to save review decision.')).toBeInTheDocument();
+    });
+    soloApi.bulkReview = async () => {
+      throw new Error('Bulk error');
+    };
+    await userEvent.click(screen.getByRole('button', { name: /Accept all/i }));
+    await waitFor(() => {
+      expect(screen.getByText('Bulk review failed.')).toBeInTheDocument();
     });
     await userEvent.click(screen.getByRole('button', { name: 'Refresh queue' }));
     view.unmount();

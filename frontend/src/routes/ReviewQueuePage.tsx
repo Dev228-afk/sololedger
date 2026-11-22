@@ -237,23 +237,76 @@ export function ReviewQueuePage() {
                 <div
                   style={{
                     marginTop: '16px',
-                    padding: '12px 14px',
+                    padding: '14px',
                     borderRadius: 'var(--r-sm)',
                     backgroundColor: 'var(--surface-muted)',
-                    fontSize: '13px',
-                    color: 'var(--muted)',
+                    border: '1px solid var(--line)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '10px',
                   }}
                 >
-                  Suggested source: <strong>{activeTxn.categorySource}</strong> · Explanation code:{' '}
-                  <code>{activeTxn.explanationCode ?? 'LOW_CONFIDENCE_THRESHOLD'}</code> · Heuristic score below{' '}
-                  <code>0.700</code> (not a calibrated probability).
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '13px', fontWeight: 600 }}>
+                    <span>Classifier confidence vs. 0.700 auto-approval threshold</span>
+                    <span className="tabular-nums">
+                      {activeTxn.confidence === null
+                        ? 'No prior match'
+                        : `${Math.round(Number(activeTxn.confidence) * 100)}% (${Number(activeTxn.confidence).toFixed(3)})`}
+                    </span>
+                  </div>
+                  <div style={{ position: 'relative', height: '10px', borderRadius: '999px', backgroundColor: '#e0dcd2', overflow: 'hidden' }}>
+                    <div
+                      className="sl-bar-fill"
+                      style={{
+                        width: `${Math.max(4, Math.min(100, Math.round(Number(activeTxn.confidence ?? '0') * 100)))}%`,
+                        height: '100%',
+                        backgroundColor: 'var(--warning)',
+                      }}
+                    />
+                    <span
+                      aria-hidden="true"
+                      style={{ position: 'absolute', left: '70%', top: 0, bottom: 0, width: '2px', backgroundColor: 'var(--ink)' }}
+                    />
+                  </div>
+                  <div style={{ fontSize: '13px', color: 'var(--muted)' }}>
+                    Flagged for quick human confirmation so low-confidence guesses never auto-post to approved books.
+                  </div>
+                  <details style={{ fontSize: '12px', color: 'var(--muted)' }}>
+                    <summary style={{ cursor: 'pointer', fontWeight: 600 }}>Classification trace</summary>
+                    <div style={{ marginTop: '4px' }}>
+                      Suggested source: <strong>{activeTxn.categorySource}</strong> · Explanation code:{' '}
+                      <code>{activeTxn.explanationCode ?? 'LOW_CONFIDENCE_THRESHOLD'}</code> · Heuristic score below{' '}
+                      <code>0.700</code>.
+                    </div>
+                  </details>
                 </div>
 
-                <div style={{ marginTop: '18px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                {categories ? (
+                  <div style={{ marginTop: '14px' }}>
+                    <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--muted)', marginBottom: '6px' }}>
+                      Quick pick category
+                    </div>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                      {categories.items.slice(0, 5).map((cat) => (
+                        <Button
+                          key={cat.code}
+                          size="sm"
+                          variant={chosenCategory === cat.code ? 'primary' : 'secondary'}
+                          onClick={() => setChosenCategory(cat.code)}
+                        >
+                          {cat.name}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
+
+                <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
                   <label style={{ fontSize: '14px', fontWeight: 600 }}>
                     Category decision
                     <select
                       aria-label="Category for review"
+                      className="sl-input"
                       value={chosenCategory}
                       onChange={(e) => setChosenCategory(e.target.value)}
                       style={{
@@ -263,8 +316,6 @@ export function ReviewQueuePage() {
                         minHeight: '42px',
                         marginTop: '6px',
                         padding: '8px 10px',
-                        borderRadius: 'var(--r-sm)',
-                        border: '1px solid var(--line)',
                       }}
                     >
                       {categories?.items.map((c) => (

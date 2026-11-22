@@ -44,17 +44,19 @@ export function Button({
     <button
       ref={ref}
       type={rest.type ?? 'button'}
+      className={rest.className ? `sl-btn ${rest.className}` : 'sl-btn'}
       style={{
         display: 'inline-flex',
         alignItems: 'center',
         justifyContent: 'center',
         gap: '8px',
-        minHeight: size === 'sm' ? '36px' : '44px',
+        minHeight: size === 'sm' ? '36px' : '42px',
         padding: size === 'sm' ? '6px 12px' : '8px 16px',
         borderRadius: 'var(--r-sm)',
         border: `1px solid ${colors.border}`,
         backgroundColor: colors.bg,
         color: colors.color,
+        fontFamily: 'inherit',
         fontSize: '14px',
         fontWeight: 600,
         cursor: rest.disabled ? 'not-allowed' : 'pointer',

@@ -72,13 +72,19 @@ describe('SoloLedger 8 routes integration UI tests', () => {
       months: [
         {
           month: '2026-02',
-          byCategory: [{ code: 'EQUIPMENT', name: 'Hardware & Equipment', netSpend: '-50.00' }],
-          netSpend: '-50.00',
+          byCategory: [
+            { code: 'EQUIPMENT', name: 'Hardware & Equipment', netSpend: '-50.00' },
+            { code: 'SOFTWARE', name: 'Software & Cloud', netSpend: '125.00' },
+          ],
+          netSpend: '75.00',
           totalCredits: '150.00',
-          totalDebits: '100.00',
+          totalDebits: '75.00',
         },
       ],
-      categoryTotals: [{ code: 'EQUIPMENT', name: 'Hardware & Equipment', netSpend: '-50.00' }],
+      categoryTotals: [
+        { code: 'EQUIPMENT', name: 'Hardware & Equipment', netSpend: '-50.00' },
+        { code: 'SOFTWARE', name: 'Software & Cloud', netSpend: '125.00' },
+      ],
     });
     soloApi.listTransactions = async () => ({ items: [], nextCursor: null, totalCount: 2 });
     soloApi.listImports = async () => ({
@@ -102,9 +108,12 @@ describe('SoloLedger 8 routes integration UI tests', () => {
 
     renderRoute('/dashboard');
     await waitFor(() => {
-      expect(screen.getByTestId('dashboard-net-spend')).toHaveTextContent('-$50.00');
+      expect(screen.getByTestId('dashboard-net-spend')).toHaveTextContent('$75.00');
     });
     expect(screen.getByText('Review 2 items')).toBeInTheDocument();
+    await userEvent.click(screen.getByRole('button', { name: 'Q1 2026' }));
+    expect(screen.getByLabelText('From month')).toHaveValue('2026-01');
+    expect(screen.getByLabelText('To month')).toHaveValue('2026-03');
   });
 
   test('/imports/new handles ambiguous dates, 409 duplicate import, and back navigation', async () => {
@@ -209,7 +218,7 @@ describe('SoloLedger 8 routes integration UI tests', () => {
           categoryName: 'Software & Cloud',
           categoryKind: 'EXPENSE',
           categorySource: 'KEYWORD',
-          confidence: '0.940',
+          confidence: '0.950',
           reviewStatus: 'SUGGESTED',
           duplicateCandidate: false,
           explanationCode: 'EXACT',
@@ -258,13 +267,14 @@ describe('SoloLedger 8 routes integration UI tests', () => {
     await waitFor(() => {
       expect(screen.getAllByText('DEMO CLOUD HOSTING').length).toBeGreaterThan(0);
     });
-    await userEvent.click(screen.getAllByRole('button', { name: 'Edit' })[0]!);
+    await userEvent.click(screen.getAllByRole('button', { name: 'Edit' })[1]!);
     await userEvent.selectOptions(screen.getByLabelText('Category choice'), 'EQUIPMENT');
     await userEvent.click(screen.getByRole('button', { name: 'Save decision' }));
     await waitFor(() => expect(saved).toBe(true));
 
     await userEvent.click(screen.getByRole('button', { name: 'Next page' }));
     expect(screen.getByRole('button', { name: 'First page' })).toBeInTheDocument();
+    await userEvent.click(screen.getByRole('button', { name: 'First page' }));
   });
 
   test('/review retains unsaved category on 409 conflict and allows bulk accept', async () => {
@@ -307,7 +317,11 @@ describe('SoloLedger 8 routes integration UI tests', () => {
     await waitFor(() => {
       expect(screen.getByText('Cross-import duplicate candidate')).toBeInTheDocument();
     });
+    expect(screen.getByText('Classification trace')).toBeInTheDocument();
+    await userEvent.click(screen.getByRole('button', { name: 'Software & Cloud' }));
+    expect(screen.getByLabelText('Category for review')).toHaveValue('SOFTWARE');
     await userEvent.selectOptions(screen.getByLabelText('Category for review'), 'EQUIPMENT');
+    expect(screen.getByLabelText('Category for review')).toHaveValue('EQUIPMENT');
     await userEvent.click(screen.getByRole('button', { name: 'Save changed category' }));
 
     await waitFor(() => {
