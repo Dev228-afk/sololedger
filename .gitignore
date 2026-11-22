@@ -1,0 +1,16 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+htmlcov/
+.coverage
+coverage.xml
+node_modules/
+dist/
+coverage/
+var/
+.env
+.env.local
+*.log
+playwright-report/
+test-results/
