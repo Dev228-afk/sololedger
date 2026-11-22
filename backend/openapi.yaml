@@ -1,0 +1,980 @@
+openapi: 3.0.3
+info:
+  title: SoloLedger API
+  version: 1.0.0
+  description: Freelance statement import, categorization & exact ledger API
+paths:
+  /api/v1/categories:
+    get:
+      operationId: categories_retrieve
+      tags:
+      - categories
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoriesListResponse'
+          description: ''
+  /api/v1/demo/accounts:
+    get:
+      operationId: demo_accounts_retrieve
+      tags:
+      - demo
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DemoAccountsListResponse'
+          description: ''
+  /api/v1/demo/session:
+    get:
+      operationId: demo_session_retrieve
+      tags:
+      - demo
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DemoSessionResponse'
+          description: ''
+    post:
+      operationId: demo_session_create
+      tags:
+      - demo
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DemoSessionRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DemoSessionRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DemoSessionRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DemoSessionResponse'
+          description: ''
+  /api/v1/exports/ledger.csv:
+    get:
+      operationId: exports_ledger.csv_retrieve
+      tags:
+      - exports
+      responses:
+        '200':
+          content:
+            text/csv:
+              schema:
+                type: string
+                format: binary
+          description: ''
+  /api/v1/health:
+    get:
+      operationId: health_retrieve
+      tags:
+      - health
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+          description: ''
+  /api/v1/import-previews:
+    post:
+      operationId: import_previews_create
+      tags:
+      - import-previews
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImportPreviewResponse'
+          description: ''
+  /api/v1/imports:
+    get:
+      operationId: imports_list
+      tags:
+      - imports
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImportsListResponse'
+          description: ''
+    post:
+      operationId: imports_create
+      tags:
+      - imports
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImportCreateRequest'
+        required: true
+      responses:
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImportAcceptedResponse'
+          description: ''
+  /api/v1/imports/{job_id}:
+    get:
+      operationId: imports_retrieve
+      parameters:
+      - in: path
+        name: job_id
+        schema:
+          type: string
+        required: true
+      tags:
+      - imports
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImportDetailResponse'
+          description: ''
+  /api/v1/imports/{job_id}/cancel:
+    post:
+      operationId: imports_cancel_create
+      parameters:
+      - in: path
+        name: job_id
+        schema:
+          type: string
+        required: true
+      tags:
+      - imports
+      responses:
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImportAcceptedResponse'
+          description: ''
+  /api/v1/imports/{job_id}/retry:
+    post:
+      operationId: imports_retry_create
+      parameters:
+      - in: path
+        name: job_id
+        schema:
+          type: string
+        required: true
+      tags:
+      - imports
+      responses:
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImportAcceptedResponse'
+          description: ''
+  /api/v1/merchant-rules:
+    get:
+      operationId: merchant_rules_retrieve
+      tags:
+      - merchant-rules
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MerchantRulesListResponse'
+          description: ''
+  /api/v1/merchant-rules/{rule_id}:
+    patch:
+      operationId: merchant_rules_partial_update
+      parameters:
+      - in: path
+        name: rule_id
+        schema:
+          type: string
+        required: true
+      tags:
+      - merchant-rules
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedMerchantRulePatchRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedMerchantRulePatchRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedMerchantRulePatchRequest'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MerchantRulePatchResponse'
+          description: ''
+  /api/v1/reports/monthly:
+    get:
+      operationId: reports_monthly_retrieve
+      tags:
+      - reports
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MonthlyReportResponse'
+          description: ''
+  /api/v1/reviews/bulk:
+    post:
+      operationId: reviews_bulk_create
+      tags:
+      - reviews
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BulkReviewRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/BulkReviewRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BulkReviewRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkReviewResponse'
+          description: ''
+  /api/v1/transactions:
+    get:
+      operationId: transactions_retrieve
+      tags:
+      - transactions
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionsListResponse'
+          description: ''
+  /api/v1/transactions/{transaction_id}/review:
+    patch:
+      operationId: transactions_review_partial_update
+      parameters:
+      - in: path
+        name: transaction_id
+        schema:
+          type: string
+        required: true
+      tags:
+      - transactions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedTransactionReviewRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedTransactionReviewRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedTransactionReviewRequest'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionReviewResponse'
+          description: ''
+components:
+  schemas:
+    AmountModeEnum:
+      enum:
+      - DEBIT_CREDIT
+      - SIGNED_AMOUNT
+      type: string
+      description: |-
+        * `DEBIT_CREDIT` - DEBIT_CREDIT
+        * `SIGNED_AMOUNT` - SIGNED_AMOUNT
+    ApiAccount:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        displayName:
+          type: string
+        timezone:
+          type: string
+      required:
+      - displayName
+      - id
+      - timezone
+    ApiCategory:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        code:
+          type: string
+        name:
+          type: string
+        kind:
+          $ref: '#/components/schemas/KindEnum'
+        sortOrder:
+          type: integer
+      required:
+      - code
+      - id
+      - kind
+      - name
+      - sortOrder
+    ApiImportRowError:
+      type: object
+      properties:
+        sourceLineNo:
+          type: integer
+        errorCode:
+          type: string
+          nullable: true
+        errorDetail:
+          type: string
+      required:
+      - errorCode
+      - errorDetail
+      - sourceLineNo
+    ApiImportSummary:
+      type: object
+      properties:
+        jobId:
+          type: string
+          format: uuid
+        status:
+          $ref: '#/components/schemas/StatusEnum'
+        fileName:
+          type: string
+        fileSha256:
+          type: string
+        totalRows:
+          type: integer
+        processedRows:
+          type: integer
+        validRows:
+          type: integer
+        invalidRows:
+          type: integer
+        needsReviewCount:
+          type: integer
+        attempts:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+      required:
+      - attempts
+      - createdAt
+      - fileName
+      - fileSha256
+      - invalidRows
+      - jobId
+      - needsReviewCount
+      - processedRows
+      - status
+      - totalRows
+      - validRows
+    ApiMerchantRule:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        merchantKey:
+          type: string
+        categoryCode:
+          type: string
+        categoryName:
+          type: string
+        priority:
+          type: integer
+        active:
+          type: boolean
+        approvedAt:
+          type: string
+          format: date-time
+        version:
+          type: integer
+      required:
+      - active
+      - approvedAt
+      - categoryCode
+      - categoryName
+      - id
+      - merchantKey
+      - priority
+      - version
+    ApiReviewDecision:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        transactionId:
+          type: string
+          format: uuid
+        previousCategoryCode:
+          type: string
+        newCategoryCode:
+          type: string
+        previousStatus:
+          type: string
+        decision:
+          $ref: '#/components/schemas/DecisionEnum'
+        createdAt:
+          type: string
+          format: date-time
+      required:
+      - createdAt
+      - decision
+      - id
+      - newCategoryCode
+      - previousCategoryCode
+      - previousStatus
+      - transactionId
+    ApiTransaction:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        importJobId:
+          type: string
+          format: uuid
+        postedDate:
+          type: string
+          format: date
+        description:
+          type: string
+        merchant:
+          type: string
+        signedAmount:
+          type: string
+        currency:
+          type: string
+        externalRef:
+          type: string
+          nullable: true
+        categoryCode:
+          type: string
+        categoryName:
+          type: string
+        categoryKind:
+          type: string
+        categorySource:
+          $ref: '#/components/schemas/CategorySourceEnum'
+        confidence:
+          type: string
+          nullable: true
+        reviewStatus:
+          $ref: '#/components/schemas/ReviewStatusEnum'
+        duplicateCandidate:
+          type: boolean
+        explanationCode:
+          type: string
+          nullable: true
+        version:
+          type: integer
+      required:
+      - categoryCode
+      - categoryKind
+      - categoryName
+      - categorySource
+      - confidence
+      - currency
+      - description
+      - duplicateCandidate
+      - explanationCode
+      - externalRef
+      - id
+      - importJobId
+      - merchant
+      - postedDate
+      - reviewStatus
+      - signedAmount
+      - version
+    BulkReviewItemRequest:
+      type: object
+      properties:
+        transactionId:
+          type: string
+          format: uuid
+        version:
+          type: integer
+        decision:
+          $ref: '#/components/schemas/DecisionEnum'
+        categoryCode:
+          type: string
+          nullable: true
+        rememberMerchant:
+          type: boolean
+          default: false
+      required:
+      - decision
+      - transactionId
+      - version
+    BulkReviewRequest:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/BulkReviewItemRequest'
+      required:
+      - items
+    BulkReviewResponse:
+      type: object
+      properties:
+        accepted:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiTransaction'
+        conflicts:
+          type: array
+          items:
+            type: object
+            additionalProperties: {}
+      required:
+      - accepted
+      - conflicts
+    CategoriesListResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiCategory'
+      required:
+      - items
+    CategorySourceEnum:
+      enum:
+      - USER_RULE
+      - KEYWORD
+      - LLM
+      - FALLBACK
+      - USER_REVIEW
+      type: string
+      description: |-
+        * `USER_RULE` - USER_RULE
+        * `KEYWORD` - KEYWORD
+        * `LLM` - LLM
+        * `FALLBACK` - FALLBACK
+        * `USER_REVIEW` - USER_REVIEW
+    DecisionEnum:
+      enum:
+      - ACCEPT
+      - CHANGE
+      type: string
+      description: |-
+        * `ACCEPT` - ACCEPT
+        * `CHANGE` - CHANGE
+    DemoAccountsListResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiAccount'
+      required:
+      - items
+    DemoSessionRequest:
+      type: object
+      properties:
+        accountId:
+          type: string
+          format: uuid
+      required:
+      - accountId
+    DemoSessionResponse:
+      type: object
+      properties:
+        account:
+          allOf:
+          - $ref: '#/components/schemas/ApiAccount'
+          nullable: true
+        csrfToken:
+          type: string
+          nullable: true
+      required:
+      - account
+      - csrfToken
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        version:
+          type: string
+        dependencies:
+          type: object
+          additionalProperties:
+            type: string
+      required:
+      - dependencies
+      - status
+      - version
+    ImportAcceptedResponse:
+      type: object
+      properties:
+        jobId:
+          type: string
+          format: uuid
+        status:
+          type: string
+        statusUrl:
+          type: string
+      required:
+      - jobId
+      - status
+    ImportCreateRequest:
+      type: object
+      properties:
+        uploadToken:
+          type: string
+          format: uuid
+        mapping:
+          $ref: '#/components/schemas/MappingConfig'
+      required:
+      - mapping
+      - uploadToken
+    ImportDetailResponse:
+      type: object
+      properties:
+        jobId:
+          type: string
+          format: uuid
+        status:
+          $ref: '#/components/schemas/StatusEnum'
+        fileName:
+          type: string
+        fileSha256:
+          type: string
+        totalRows:
+          type: integer
+        processedRows:
+          type: integer
+        validRows:
+          type: integer
+        invalidRows:
+          type: integer
+        needsReviewCount:
+          type: integer
+        attempts:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+        phaseLabel:
+          type: string
+        errorCode:
+          type: string
+          nullable: true
+        errorMessage:
+          type: string
+          nullable: true
+        canRetry:
+          type: boolean
+        canCancel:
+          type: boolean
+        startedAt:
+          type: string
+          format: date-time
+          nullable: true
+        finishedAt:
+          type: string
+          format: date-time
+          nullable: true
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiImportRowError'
+      required:
+      - attempts
+      - canCancel
+      - canRetry
+      - createdAt
+      - errorCode
+      - errorMessage
+      - errors
+      - fileName
+      - fileSha256
+      - finishedAt
+      - invalidRows
+      - jobId
+      - needsReviewCount
+      - phaseLabel
+      - processedRows
+      - startedAt
+      - status
+      - totalRows
+      - validRows
+    ImportPreviewResponse:
+      type: object
+      properties:
+        uploadToken:
+          type: string
+          format: uuid
+        fileName:
+          type: string
+        sha256:
+          type: string
+        headers:
+          type: array
+          items:
+            type: string
+        previewRows:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: string
+        suggestedMapping:
+          $ref: '#/components/schemas/MappingConfig'
+        expiresAt:
+          type: string
+          format: date-time
+      required:
+      - expiresAt
+      - fileName
+      - headers
+      - previewRows
+      - sha256
+      - suggestedMapping
+      - uploadToken
+    ImportsListResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiImportSummary'
+        nextCursor:
+          type: string
+          nullable: true
+      required:
+      - items
+      - nextCursor
+    KindEnum:
+      enum:
+      - EXPENSE
+      - INCOME
+      - TRANSFER
+      type: string
+      description: |-
+        * `EXPENSE` - EXPENSE
+        * `INCOME` - INCOME
+        * `TRANSFER` - TRANSFER
+    MappingConfig:
+      type: object
+      properties:
+        postedDateColumn:
+          type: string
+        descriptionColumn:
+          type: string
+        amountMode:
+          $ref: '#/components/schemas/AmountModeEnum'
+        debitColumn:
+          type: string
+          nullable: true
+        creditColumn:
+          type: string
+          nullable: true
+        amountColumn:
+          type: string
+          nullable: true
+        currencyColumn:
+          type: string
+          nullable: true
+        fixedCurrency:
+          type: string
+          nullable: true
+        transactionIdColumn:
+          type: string
+          nullable: true
+        dateFormat:
+          type: string
+        decimalSeparator:
+          type: string
+        headerRow:
+          type: integer
+      required:
+      - amountMode
+      - dateFormat
+      - decimalSeparator
+      - descriptionColumn
+      - headerRow
+      - postedDateColumn
+    MerchantRulePatchResponse:
+      type: object
+      properties:
+        rule:
+          $ref: '#/components/schemas/ApiMerchantRule'
+      required:
+      - rule
+    MerchantRulesListResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiMerchantRule'
+        nextCursor:
+          type: string
+          nullable: true
+      required:
+      - items
+      - nextCursor
+    MonthlyReportResponse:
+      type: object
+      properties:
+        currency:
+          type: string
+        months:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReportMonthEntry'
+        categoryTotals:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReportCategoryTotal'
+      required:
+      - categoryTotals
+      - currency
+      - months
+    PatchedMerchantRulePatchRequest:
+      type: object
+      properties:
+        version:
+          type: integer
+        categoryCode:
+          type: string
+          nullable: true
+        active:
+          type: boolean
+        priority:
+          type: integer
+    PatchedTransactionReviewRequest:
+      type: object
+      properties:
+        version:
+          type: integer
+        decision:
+          $ref: '#/components/schemas/DecisionEnum'
+        categoryCode:
+          type: string
+          nullable: true
+        rememberMerchant:
+          type: boolean
+          default: false
+    ReportCategoryTotal:
+      type: object
+      properties:
+        code:
+          type: string
+        name:
+          type: string
+        netSpend:
+          type: string
+      required:
+      - code
+      - name
+      - netSpend
+    ReportMonthEntry:
+      type: object
+      properties:
+        month:
+          type: string
+        byCategory:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReportCategoryTotal'
+        netSpend:
+          type: string
+        totalCredits:
+          type: string
+        totalDebits:
+          type: string
+      required:
+      - byCategory
+      - month
+      - netSpend
+      - totalCredits
+      - totalDebits
+    ReviewStatusEnum:
+      enum:
+      - SUGGESTED
+      - NEEDS_REVIEW
+      - APPROVED
+      type: string
+      description: |-
+        * `SUGGESTED` - SUGGESTED
+        * `NEEDS_REVIEW` - NEEDS_REVIEW
+        * `APPROVED` - APPROVED
+    StatusEnum:
+      enum:
+      - QUEUED
+      - VALIDATING
+      - PROCESSING
+      - AWAITING_REVIEW
+      - COMPLETED
+      - FAILED
+      - CANCELED
+      type: string
+      description: |-
+        * `QUEUED` - QUEUED
+        * `VALIDATING` - VALIDATING
+        * `PROCESSING` - PROCESSING
+        * `AWAITING_REVIEW` - AWAITING_REVIEW
+        * `COMPLETED` - COMPLETED
+        * `FAILED` - FAILED
+        * `CANCELED` - CANCELED
+    TransactionReviewResponse:
+      type: object
+      properties:
+        transaction:
+          $ref: '#/components/schemas/ApiTransaction'
+        reviewDecision:
+          $ref: '#/components/schemas/ApiReviewDecision'
+      required:
+      - reviewDecision
+      - transaction
+    TransactionsListResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiTransaction'
+        nextCursor:
+          type: string
+          nullable: true
+        totalCount:
+          type: integer
+      required:
+      - items
+      - nextCursor
+      - totalCount

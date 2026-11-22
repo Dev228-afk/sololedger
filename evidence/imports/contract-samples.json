@@ -1,0 +1,85 @@
+{
+  "importCreated202": {
+    "jobId": "4f7c1046-048c-486d-b7f2-7580ed508302",
+    "status": "QUEUED",
+    "statusUrl": "/api/v1/imports/4f7c1046-048c-486d-b7f2-7580ed508302"
+  },
+  "completedJobDetail": {
+    "jobId": "4f7c1046-048c-486d-b7f2-7580ed508302",
+    "status": "COMPLETED",
+    "fileName": "smoke_5rows.csv",
+    "fileSha256": "f01636263bd337fa41186b4da3dc14c7f554efc7fcdbfe421e13cb5dc736a173",
+    "totalRows": 5,
+    "processedRows": 5,
+    "validRows": 5,
+    "invalidRows": 0,
+    "needsReviewCount": 0,
+    "attempts": 1,
+    "phaseLabel": "Completed",
+    "errorCode": null,
+    "errorMessage": null,
+    "canRetry": false,
+    "canCancel": false,
+    "startedAt": "2026-11-22T03:10:00.095222+00:00",
+    "finishedAt": "2026-11-22T03:10:00.214289+00:00",
+    "createdAt": "2026-11-22T03:10:00.081351+00:00",
+    "errors": []
+  },
+  "conflict409": {
+    "error": {
+      "code": "VERSION_CONFLICT",
+      "message": "This transaction was updated in another request. Refresh to compare.",
+      "requestId": "req_75bbb839a566",
+      "details": {
+        "currentVersion": 2,
+        "currentCategoryCode": "OFFICE_SUPPLIES"
+      },
+      "fieldErrors": {}
+    }
+  },
+  "monthlyReportNegativeRefund": {
+    "currency": "USD",
+    "months": [
+      {
+        "month": "2026-02",
+        "byCategory": [
+          {
+            "code": "EQUIPMENT",
+            "name": "Hardware & Equipment",
+            "netSpend": "-50.00"
+          },
+          {
+            "code": "OFFICE_SUPPLIES",
+            "name": "Office Supplies",
+            "netSpend": "15.00"
+          },
+          {
+            "code": "UNCATEGORIZED",
+            "name": "Uncategorized",
+            "netSpend": "30.00"
+          }
+        ],
+        "netSpend": "-5.00",
+        "totalCredits": "150.00",
+        "totalDebits": "145.00"
+      }
+    ],
+    "categoryTotals": [
+      {
+        "code": "UNCATEGORIZED",
+        "name": "Uncategorized",
+        "netSpend": "30.00"
+      },
+      {
+        "code": "OFFICE_SUPPLIES",
+        "name": "Office Supplies",
+        "netSpend": "15.00"
+      },
+      {
+        "code": "EQUIPMENT",
+        "name": "Hardware & Equipment",
+        "netSpend": "-50.00"
+      }
+    ]
+  }
+}

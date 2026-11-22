@@ -1,0 +1,77 @@
+name: SoloLedger CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  backend-and-eval:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: sololedger
+          POSTGRES_PASSWORD: sololedger_local_2026
+          POSTGRES_DB: sololedger
+        ports:
+          - 5436:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6382:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+
+    env:
+      DATABASE_URL: postgresql://sololedger:sololedger_local_2026@127.0.0.1:5436/sololedger
+      CELERY_BROKER_URL: redis://127.0.0.1:6382/0
+      CELERY_RESULT_BACKEND: redis://127.0.0.1:6382/1
+      SOLOLEDGER_LLM_PROVIDER: mock
+      DJANGO_DEBUG: 'false'
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: |
+          python -m venv backend/.venv
+          backend/.venv/bin/pip install -r backend/requirements.txt
+      - run: |
+          cd backend
+          .venv/bin/ruff check .
+          .venv/bin/python manage.py migrate
+          .venv/bin/python ../scripts/seed.py
+          .venv/bin/python ../scripts/score_classifier.py
+          .venv/bin/pytest --cov=apps --cov=classification --cov=tasks --cov-report=term-missing --cov-fail-under=91
+
+  frontend-test-and-coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: frontend/pnpm-lock.yaml
+      - run: |
+          cd frontend
+          pnpm install --frozen-lockfile
+          pnpm run typecheck
+          pnpm run lint
+          pnpm run test:coverage
+          pnpm run build
+

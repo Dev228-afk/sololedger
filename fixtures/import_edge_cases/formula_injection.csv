@@ -1,0 +1,4 @@
+Date,Description,Amount,Currency
+2026-02-15,"=HYPERLINK(""http://bad.example"",""ACME"")",-15.00,USD
+2026-02-16,+CMD|'/C calc'!A0,-22.00,USD
+2026-02-17,@SUM(1+1),-8.00,USD

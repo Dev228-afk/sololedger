@@ -1,0 +1,13 @@
+{
+  "jobId": "7a3de7f4-cb5b-4da0-b6b8-72781446772a",
+  "verifiedAt": "2026-11-22T03:10:51.986Z",
+  "expectedRows": 5,
+  "verifiedSignedAmounts": [
+    "-$25.00",
+    "-$42.85",
+    "-$31.40",
+    "+$1500.00",
+    "-$64.00"
+  ],
+  "status": "PASS"
+}

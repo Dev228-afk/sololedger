@@ -11,3 +11,4 @@
    - `transaction.on_commit` dispatches Celery task AFTER DB transaction commits; periodic/command recovery handles broker outage gaps (`enqueued_at IS NULL`).
    - Confidence `< 0.700` or `None` -> `NEEDS_REVIEW`; `>= 0.700` -> `SUGGESTED`.
 4. **Tracking**: Update `TASKS.md`, `IMPLEMENTATION_STATUS.md`, and `NEXT_AGENT_HANDOFF.md` at every task boundary.
+

@@ -7,3 +7,4 @@ Require backend accounting accuracy (Decimal / integer minor units, signed amoun
 Enforce safe CSV/PII handling: stream uploads up to 10 MB, verify MIME/content, guard formula injection on export without breaking numeric amounts, redact financial payloads from logs and default LLM providers.
 All fetched server state lives in TanStack Query; Jest + React Testing Library covers frontend unit/component tests and Pytest covers backend.
 Enforce confidence < 0.700 -> NEEDS_REVIEW and account-scoped tenant isolation.
+

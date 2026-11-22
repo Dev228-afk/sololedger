@@ -1,0 +1,22 @@
+{
+  "formats": [
+    "DEBIT_CREDIT_STANDARD",
+    "SIGNED_AMOUNT_CURRENCY",
+    "SLASH_US_DATE_EXPORT",
+    "COMPACT_TXN_EXPORT"
+  ],
+  "merchantAliases": [
+    {
+      "raw": "DEMO CLOUD HOSTING #882",
+      "canonical": "DEMO CLOUD HOSTING"
+    },
+    {
+      "raw": "ACME OFFICE SUPPLIES INV-104",
+      "canonical": "ACME OFFICE SUPPLIES"
+    },
+    {
+      "raw": "NORTHWOOD MART #402",
+      "canonical": "NORTHWOOD MART"
+    }
+  ]
+}

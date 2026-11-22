@@ -1,0 +1,8 @@
+{
+  "unauth401Status": 401,
+  "csrf403Status": 403,
+  "crossTenantImport404Status": 404,
+  "crossTenantTransactionCount": 0,
+  "formulaNeutralizedInExport": true,
+  "numericAmountsPreservedInExport": true
+}

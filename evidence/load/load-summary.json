@@ -1,0 +1,141 @@
+{
+  "vus": 150,
+  "durationSec": 15,
+  "totalRequests": 1993,
+  "failures": 0,
+  "failureRatePct": 0.0,
+  "requestsPerSec": 141.62,
+  "p50Ms": 570.0,
+  "p95Ms": 1200.0,
+  "p99Ms": 6600.0,
+  "endpoints": [
+    {
+      "endpoint": "/api/v1/demo/session",
+      "requests": 150,
+      "failures": 0,
+      "p50Ms": 3600.0,
+      "p95Ms": 6900.0,
+      "p99Ms": 7300.0,
+      "rps": 10.65912064884079
+    },
+    {
+      "endpoint": "/api/v1/health",
+      "requests": 177,
+      "failures": 0,
+      "p50Ms": 670.0,
+      "p95Ms": 1200.0,
+      "p99Ms": 1300.0,
+      "rps": 12.577762365632132
+    },
+    {
+      "endpoint": "/api/v1/imports",
+      "requests": 328,
+      "failures": 0,
+      "p50Ms": 530.0,
+      "p95Ms": 1100.0,
+      "p99Ms": 1200.0,
+      "rps": 23.307943818798528
+    },
+    {
+      "endpoint": "/api/v1/merchant-rules",
+      "requests": 163,
+      "failures": 0,
+      "p50Ms": 520.0,
+      "p95Ms": 990.0,
+      "p99Ms": 1100.0,
+      "rps": 11.582911105073658
+    },
+    {
+      "endpoint": "/api/v1/reports/monthly",
+      "requests": 508,
+      "failures": 0,
+      "p50Ms": 530.0,
+      "p95Ms": 1100.0,
+      "p99Ms": 1100.0,
+      "rps": 36.09888859740747
+    },
+    {
+      "endpoint": "/api/v1/transactions",
+      "requests": 667,
+      "failures": 0,
+      "p50Ms": 560.0,
+      "p95Ms": 1100.0,
+      "p99Ms": 1200.0,
+      "rps": 47.39755648517871
+    }
+  ],
+  "smoke50Vu": {
+    "vus": 50,
+    "durationSec": 12,
+    "totalRequests": 1472,
+    "failures": 0,
+    "failureRatePct": 0.0,
+    "requestsPerSec": 133.43,
+    "p50Ms": 190.0,
+    "p95Ms": 390.0,
+    "p99Ms": 510.0,
+    "endpoints": [
+      {
+        "endpoint": "/api/v1/demo/session",
+        "requests": 50,
+        "failures": 0,
+        "p50Ms": 210.0,
+        "p95Ms": 890.0,
+        "p99Ms": 990.0,
+        "rps": 4.532353972066384
+      },
+      {
+        "endpoint": "/api/v1/health",
+        "requests": 135,
+        "failures": 0,
+        "p50Ms": 360.0,
+        "p95Ms": 510.0,
+        "p99Ms": 550.0,
+        "rps": 12.237355724579238
+      },
+      {
+        "endpoint": "/api/v1/imports",
+        "requests": 256,
+        "failures": 0,
+        "p50Ms": 150.0,
+        "p95Ms": 270.0,
+        "p99Ms": 340.0,
+        "rps": 23.205652336979888
+      },
+      {
+        "endpoint": "/api/v1/merchant-rules",
+        "requests": 132,
+        "failures": 0,
+        "p50Ms": 120.0,
+        "p95Ms": 230.0,
+        "p99Ms": 270.0,
+        "rps": 11.965414486255256
+      },
+      {
+        "endpoint": "/api/v1/reports/monthly",
+        "requests": 395,
+        "failures": 0,
+        "p50Ms": 190.0,
+        "p95Ms": 320.0,
+        "p99Ms": 390.0,
+        "rps": 35.805596379324435
+      },
+      {
+        "endpoint": "/api/v1/transactions",
+        "requests": 504,
+        "failures": 0,
+        "p50Ms": 210.0,
+        "p95Ms": 340.0,
+        "p99Ms": 380.0,
+        "rps": 45.68612803842915
+      }
+    ]
+  },
+  "classification": "LOCAL_SINGLE_HOST_BENCHMARK",
+  "productionTarget": "500 VUs <150ms p95 (TARGET, requires multi-worker prod cluster; k6/Locust script authored in load/)",
+  "hostSpec": {
+    "os": "Windows-10-10.0.19045-SP0",
+    "cpuCount": 16,
+    "server": "Waitress WSGI (32 threads, connection-limit 450, local PostgreSQL 16 in WSL2 Docker)"
+  }
+}

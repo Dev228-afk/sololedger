@@ -34,3 +34,4 @@ Authoritative source: `PROJECT_CONSTITUTION.md` Sections A–J.
 ## 4. Confidence & State Machines
 - `confidence is None or confidence < 0.700` -> `NEEDS_REVIEW`; `confidence >= 0.700` -> `SUGGESTED` (`0 <= confidence <= 1`).
 - Import: `QUEUED -> VALIDATING -> PROCESSING -> AWAITING_REVIEW -> COMPLETED` (or `PROCESSING -> COMPLETED` when 0 `NEEDS_REVIEW`); `VALIDATING/PROCESSING -> FAILED | CANCELED`; `FAILED -> QUEUED` on explicit retry.
+

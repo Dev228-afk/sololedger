@@ -1,0 +1,16 @@
+{
+  "datasetSha256": "e85b3b6d2b2298cc85a40e25971b1830927e8c3f85d8c6669cccbf8170ad1565",
+  "totalRows": 1080,
+  "devRows": 742,
+  "heldOutRows": 338,
+  "heldOutFamiliesCount": 13,
+  "classification": "REPRODUCED",
+  "historicalResumeClaimFirstPassAccuracy": "0.850 (HISTORICAL_RESUME_CLAIM)",
+  "heldOutFirstPassAccuracy": 0.932,
+  "heldOutMacroF1": 0.8729,
+  "abstentionRate": 0.2219,
+  "postReviewAccuracy": 1.0,
+  "correctionsConsultedCount": 3,
+  "secondImportUserRuleHits": 75,
+  "secondImportRememberedAccuracy": 1.0
+}

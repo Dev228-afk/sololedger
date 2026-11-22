@@ -1,0 +1,30 @@
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings"
+python_files = ["tests.py", "test_*.py", "*_tests.py"]
+testpaths = ["tests", "apps", "classification", "tasks"]
+addopts = "-q --tb=short"
+
+[tool.coverage.run]
+source = ["apps", "classification", "tasks"]
+omit = [
+  "*/migrations/*",
+  "*/__init__.py",
+  "manage.py",
+  "config/*",
+  "tests/*",
+]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = false
+fail_under = 91
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+exclude = ["migrations", ".venv"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W", "B", "UP"]
+ignore = ["E501"]
+
